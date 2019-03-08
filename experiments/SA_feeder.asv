@@ -1,0 +1,47 @@
+fID=fopen('trace.txt', 'r');
+sn=1;
+%============SAVE RESULTS===================
+resultId=fopen('result.txt', 'w');  
+fprintf(resultId,'SN.\tCost\tOptimal Cost\tWidth\tHeight\tTime(s)\n');
+fprintf(resultId,'====================================================');
+fprintf(resultId,'====================================================');
+fprintf(resultId,'\n');
+fclose(resultId);
+
+%============SAVE EXPRESSION===============
+expId=fopen('expr.txt', 'w');  
+fprintf(expId,'====================================================\n');
+fprintf(expId,'Sn\tExpression\n');
+fprintf(expId,'====================================================');
+fprintf(resultId,'====================================================');
+fprintf(resultId,'\n');
+fclose(resultId);
+
+
+numCuts=str2num(fgetl(fID));
+while (numCuts~=-1)
+    boxW=str2num(fgetl(fID));
+    boxH=str2num(fgetl(fID));
+    expression=str2num(fgetl(fID));
+    
+    width=reshape(str2num(fgetl(fID)), numCuts+1,[]);
+    height=reshape(str2num(fgetl(fID)), numCuts+1,[]);
+    
+    tic;
+    [expr, cost, boxWidth, boxHeight]=SA(width, height);
+    t=toc;
+    
+    resultId=fopen('result.txt', 'a');  %%%%%%%%%Save result%%%%%%%%%%%%%%
+    fprintf(resultId,'%d\t', expr);
+    fprintf(resultId,'%.2f\t', cost);
+    fprintf(resultId,'%.2f\t', boxW*boxH);
+    fprintf(resultId,'%.2f\t', boxWidth);
+    fprintf(resultId,'%.2f\t', boxHeight);
+    fprintf(resultId,'%.4f\t', t);
+    fprintf(resultId,'\n');
+    fclose(resultId);
+    
+    numCuts=str2num(fgetl(fID));        %update while loop
+end
+
+fclose(fID)
